@@ -12,34 +12,33 @@ local lush = require("lush")
 local hsl  = lush.hsl
 
 -- ── Palette ────────────────────────────────────────────────────────────────
--- Every colour in one place so tweaks are easy.
 local p = {
   -- Editor chrome
-  bg          = hsl("#0E0E0E"), -- editor background
-  bg_sidebar  = hsl("#141414"), -- sidebar / float / popup bg
-  bg_cursorln = hsl("#1A1A1A"), -- cursor line
-  bg_sel      = hsl("#213355"), -- visual selection
-  bg_search   = hsl("#2D4F7C"), -- incremental search match
-  bg_widget   = hsl("#2A2A2A"), -- input boxes, pmenu bg
+  bg          = hsl("#0E0E0E"),
+  bg_sidebar  = hsl("#141414"),
+  bg_cursorln = hsl("#1A1A1A"),
+  bg_sel      = hsl("#213355"),
+  bg_search   = hsl("#2D4F7C"),
+  bg_widget   = hsl("#2A2A2A"),
 
   -- Foregrounds
-  fg          = hsl("#C9D1D9"), -- default text, variables, punctuation, operators
-  fg_dim      = hsl("#4E5462"), -- line numbers, non-text
-  fg_active   = hsl("#8B949E"), -- active line number, end-of-buffer
-  fg_border   = hsl("#30363D"), -- window separators
+  fg          = hsl("#C9D1D9"),
+  fg_dim      = hsl("#4E5462"),
+  fg_active   = hsl("#8B949E"),
+  fg_border   = hsl("#30363D"),
 
   -- Syntax
-  comment     = hsl("#8B949E"), -- // and /* */ comments
-  keyword     = hsl("#FF7B72"), -- fn, let, mut, for, in, match, return, use, mod, pub…
-  type_       = hsl("#4EC9B0"), -- types, struct/enum names, namespaces (String, Option, stuff::)
-  func_user   = hsl("#D2A8FF"), -- user-defined functions and methods
-  func_stdlib = hsl("#DCDCAA"), -- stdlib / known methods: from(), new(), len()…
-  constant    = hsl("#79C0FF"), -- constants, enum variants, None, true (as a value)
-  macro_      = hsl("#569CD6"), -- macro invocations (println!, info!), boolean literals
-  string_     = hsl("#A5D6FF"), -- string AND character literals
-  number      = hsl("#B5CEA8"), -- numeric literals
-  parameter   = hsl("#FFA657"), -- function parameters
-  angle_brkt  = hsl("#BBBEBF"), -- generic angle brackets <>
+  comment     = hsl("#8B949E"),
+  keyword     = hsl("#FF7B72"),
+  type_       = hsl("#4EC9B0"),
+  func_user   = hsl("#D2A8FF"),
+  func_stdlib = hsl("#DCDCAA"),
+  constant    = hsl("#79C0FF"),
+  macro_      = hsl("#569CD6"),
+  string_     = hsl("#A5D6FF"),
+  number      = hsl("#B5CEA8"),
+  parameter   = hsl("#FFA657"),
+  angle_brkt  = hsl("#BBBEBF"),
 
   -- Diagnostics
   error_      = hsl("#F85149"),
@@ -47,26 +46,31 @@ local p = {
   info_       = hsl("#58A6FF"),
   hint_       = hsl("#B5CEA8"),
 
-  -- Git / diff
+  -- Git
   git_add     = hsl("#3FB950"),
   git_change  = hsl("#D29922"),
   git_delete  = hsl("#F85149"),
 
-  -- Rainbow delimiters (3-colour cycle, repeating)
-  rainbow1    = hsl("#FFD700"), -- yellow
-  rainbow2    = hsl("#DA70D6"), -- orchid / purple
-  rainbow3    = hsl("#179FFF"), -- sky blue
+  -- Rainbow delimiters (3-colour cycle)
+  rainbow1    = hsl("#FFD700"),
+  rainbow2    = hsl("#DA70D6"),
+  rainbow3    = hsl("#179FFF"),
 }
 
 -- ── Spec ───────────────────────────────────────────────────────────────────
-return lush(function()
+-- lush injects `sym` for group names that contain special characters
+-- (@, ., spaces). Without sym(), Lua's parser mistakes ["@x"] { } for a
+-- key-value pair and throws '= expected near {'.
+return lush(function(injected)
+  local sym = injected.sym
+
   return {
 
     -- ── Core Vim highlight groups ─────────────────────────────────────────
 
     Normal            { bg = p.bg,          fg = p.fg },
     NormalFloat       { bg = p.bg_sidebar,  fg = p.fg },
-    NormalNC          { bg = p.bg,          fg = p.fg }, -- non-current windows
+    NormalNC          { bg = p.bg,          fg = p.fg },
 
     Comment           { fg = p.comment,     gui = "italic" },
 
@@ -76,7 +80,7 @@ return lush(function()
     Character         { fg = p.string_ },
     Number            { fg = p.number },
     Float             { fg = p.number },
-    Boolean           { fg = p.macro_ },  -- true/false same as macro blue
+    Boolean           { fg = p.macro_ },
 
     -- Identifiers
     Identifier        { fg = p.fg },
@@ -109,15 +113,15 @@ return lush(function()
     SpecialChar       { fg = p.string_ },
     Tag               { fg = p.constant },
     Delimiter         { fg = p.fg },
-    SpecialComment    { fg = p.comment,  gui = "bold" },
+    SpecialComment    { fg = p.comment,     gui = "bold" },
     Debug             { fg = p.warn_ },
 
     -- Misc
-    Underlined        { fg = p.info_,    gui = "underline" },
-    Bold              {                  gui = "bold" },
-    Italic            {                  gui = "italic" },
+    Underlined        { fg = p.info_,       gui = "underline" },
+    Bold              {                     gui = "bold" },
+    Italic            {                     gui = "italic" },
     Error             { fg = p.error_ },
-    Todo              { fg = p.macro_,   gui = "bold" },
+    Todo              { fg = p.macro_,      gui = "bold" },
     Ignore            { fg = p.fg_dim },
 
     -- ── Editor UI ─────────────────────────────────────────────────────────
@@ -133,7 +137,7 @@ return lush(function()
     LineNr            { fg = p.fg_dim },
     SignColumn        { bg = p.bg,          fg = p.fg_dim },
     FoldColumn        { bg = p.bg,          fg = p.fg_dim },
-    Folded            { bg = p.bg_widget,   fg = p.fg_active, gui = "italic" },
+    Folded            { bg = p.bg_widget,   fg = p.fg_active,   gui = "italic" },
 
     VertSplit         { fg = p.fg_border },
     WinSeparator      { fg = p.fg_border },
@@ -141,19 +145,19 @@ return lush(function()
     StatusLine        { bg = p.bg_sidebar,  fg = p.fg },
     StatusLineNC      { bg = p.bg_sidebar,  fg = p.fg_active },
     TabLine           { bg = p.bg_sidebar,  fg = p.fg_active },
-    TabLineSel        { bg = p.bg,          fg = p.fg,      gui = "bold" },
+    TabLineSel        { bg = p.bg,          fg = p.fg,          gui = "bold" },
     TabLineFill       { bg = p.bg_sidebar },
 
     Visual            { bg = p.bg_sel },
     VisualNOS         { bg = p.bg_sel },
 
     Search            { bg = p.bg_search,   fg = p.fg },
-    IncSearch         { bg = p.info_,       fg = p.bg, gui = "bold" },
+    IncSearch         { bg = p.info_,       fg = p.bg,          gui = "bold" },
     Substitute        { bg = p.error_,      fg = p.bg },
-    MatchParen        { bg = p.bg_widget,   fg = p.fg, gui = "bold" },
+    MatchParen        { bg = p.bg_widget,   fg = p.fg,          gui = "bold" },
 
     Pmenu             { bg = p.bg_widget,   fg = p.fg },
-    PmenuSel          { bg = p.bg_sel,      fg = p.fg, gui = "bold" },
+    PmenuSel          { bg = p.bg_sel,      fg = p.fg,          gui = "bold" },
     PmenuSbar         { bg = p.bg_widget },
     PmenuThumb        { bg = p.fg_active },
 
@@ -213,156 +217,155 @@ return lush(function()
     DiagnosticFloatingHint     { fg = p.hint_ },
 
     -- ── Treesitter ────────────────────────────────────────────────────────
-    -- Neovim 0.8+ uses @-prefixed groups. lush uses the [] escape for these.
+    -- sym("@group.name") is required for any name with @ or . in it.
 
     -- Variables
-    ["@variable"]                    { fg = p.fg },
-    ["@variable.builtin"]            { fg = p.keyword },   -- self, super
-    ["@variable.parameter"]          { fg = p.parameter },
-    ["@variable.parameter.builtin"]  { fg = p.keyword },
-    ["@variable.member"]             { fg = p.fg },        -- struct fields
+    sym("@variable")                    { fg = p.fg },
+    sym("@variable.builtin")            { fg = p.keyword },
+    sym("@variable.parameter")          { fg = p.parameter },
+    sym("@variable.parameter.builtin")  { fg = p.keyword },
+    sym("@variable.member")             { fg = p.fg },
 
     -- Constants
-    ["@constant"]                    { fg = p.constant },
-    ["@constant.builtin"]            { fg = p.macro_ },    -- true, false, nil
-    ["@constant.macro"]              { fg = p.macro_ },
+    sym("@constant")                    { fg = p.constant },
+    sym("@constant.builtin")            { fg = p.macro_ },
+    sym("@constant.macro")              { fg = p.macro_ },
 
     -- Modules / namespaces
-    ["@module"]                      { fg = p.type_ },
-    ["@module.builtin"]              { fg = p.type_ },
-    ["@label"]                       { fg = p.constant },
+    sym("@module")                      { fg = p.type_ },
+    sym("@module.builtin")              { fg = p.type_ },
+    sym("@label")                       { fg = p.constant },
 
     -- Literals
-    ["@string"]                      { fg = p.string_ },
-    ["@string.documentation"]        { fg = p.comment,    gui = "italic" },
-    ["@string.regexp"]               { fg = p.string_ },
-    ["@string.escape"]               { fg = p.keyword },   -- \n, \t etc — red like keywords in VSCode
-    ["@string.special"]              { fg = p.string_ },
-    ["@string.special.url"]          { fg = p.info_,      gui = "underline" },
-    ["@string.special.symbol"]       { fg = p.constant },
+    sym("@string")                      { fg = p.string_ },
+    sym("@string.documentation")        { fg = p.comment,      gui = "italic" },
+    sym("@string.regexp")               { fg = p.string_ },
+    sym("@string.escape")               { fg = p.keyword },
+    sym("@string.special")              { fg = p.string_ },
+    sym("@string.special.url")          { fg = p.info_,        gui = "underline" },
+    sym("@string.special.symbol")       { fg = p.constant },
 
-    ["@character"]                   { fg = p.string_ },
-    ["@character.special"]           { fg = p.keyword },
+    sym("@character")                   { fg = p.string_ },
+    sym("@character.special")           { fg = p.keyword },
 
-    ["@number"]                      { fg = p.number },
-    ["@number.float"]                { fg = p.number },
+    sym("@number")                      { fg = p.number },
+    sym("@number.float")                { fg = p.number },
 
     -- Types
-    ["@type"]                        { fg = p.type_ },
-    ["@type.builtin"]                { fg = p.type_ },
-    ["@type.definition"]             { fg = p.type_ },
+    sym("@type")                        { fg = p.type_ },
+    sym("@type.builtin")                { fg = p.type_ },
+    sym("@type.definition")             { fg = p.type_ },
 
     -- Attributes / decorators
-    ["@attribute"]                   { fg = p.keyword },
-    ["@attribute.builtin"]           { fg = p.keyword },
-    ["@property"]                    { fg = p.fg },
+    sym("@attribute")                   { fg = p.keyword },
+    sym("@attribute.builtin")           { fg = p.keyword },
+    sym("@property")                    { fg = p.fg },
 
     -- Functions
-    ["@function"]                    { fg = p.func_user },
-    ["@function.builtin"]            { fg = p.func_stdlib },
-    ["@function.call"]               { fg = p.func_user },
-    ["@function.macro"]              { fg = p.macro_ },
-    ["@function.method"]             { fg = p.func_user },
-    ["@function.method.call"]        { fg = p.func_user },
+    sym("@function")                    { fg = p.func_user },
+    sym("@function.builtin")            { fg = p.func_stdlib },
+    sym("@function.call")               { fg = p.func_user },
+    sym("@function.macro")              { fg = p.macro_ },
+    sym("@function.method")             { fg = p.func_user },
+    sym("@function.method.call")        { fg = p.func_user },
 
     -- Keywords
-    ["@keyword"]                     { fg = p.keyword },
-    ["@keyword.coroutine"]           { fg = p.keyword },
-    ["@keyword.function"]            { fg = p.keyword },
-    ["@keyword.operator"]            { fg = p.keyword },
-    ["@keyword.import"]              { fg = p.keyword },
-    ["@keyword.type"]                { fg = p.keyword },
-    ["@keyword.modifier"]            { fg = p.keyword },  -- pub, mut
-    ["@keyword.repeat"]              { fg = p.keyword },
-    ["@keyword.return"]              { fg = p.keyword },
-    ["@keyword.debug"]               { fg = p.warn_ },
-    ["@keyword.exception"]           { fg = p.keyword },
-    ["@keyword.conditional"]         { fg = p.keyword },
-    ["@keyword.conditional.ternary"] { fg = p.keyword },
-    ["@keyword.directive"]           { fg = p.keyword },
-    ["@keyword.directive.define"]    { fg = p.keyword },
+    sym("@keyword")                     { fg = p.keyword },
+    sym("@keyword.coroutine")           { fg = p.keyword },
+    sym("@keyword.function")            { fg = p.keyword },
+    sym("@keyword.operator")            { fg = p.keyword },
+    sym("@keyword.import")              { fg = p.keyword },
+    sym("@keyword.type")                { fg = p.keyword },
+    sym("@keyword.modifier")            { fg = p.keyword },
+    sym("@keyword.repeat")              { fg = p.keyword },
+    sym("@keyword.return")              { fg = p.keyword },
+    sym("@keyword.debug")               { fg = p.warn_ },
+    sym("@keyword.exception")           { fg = p.keyword },
+    sym("@keyword.conditional")         { fg = p.keyword },
+    sym("@keyword.conditional.ternary") { fg = p.keyword },
+    sym("@keyword.directive")           { fg = p.keyword },
+    sym("@keyword.directive.define")    { fg = p.keyword },
 
     -- Punctuation
-    ["@punctuation.delimiter"]       { fg = p.fg },      -- ; , .
-    ["@punctuation.bracket"]         { fg = p.fg },      -- ( ) [ ] { }
-    ["@punctuation.special"]         { fg = p.fg },      -- interpolation braces
+    sym("@punctuation.delimiter")       { fg = p.fg },
+    sym("@punctuation.bracket")         { fg = p.fg },
+    sym("@punctuation.special")         { fg = p.fg },
 
     -- Comments
-    ["@comment"]                     { fg = p.comment,    gui = "italic" },
-    ["@comment.documentation"]       { fg = p.comment,    gui = "italic" },
-    ["@comment.error"]               { fg = p.error_,     gui = "bold" },
-    ["@comment.warning"]             { fg = p.warn_,      gui = "bold" },
-    ["@comment.todo"]                { fg = p.macro_,     gui = "bold" },
-    ["@comment.note"]                { fg = p.info_,      gui = "bold" },
+    sym("@comment")                     { fg = p.comment,      gui = "italic" },
+    sym("@comment.documentation")       { fg = p.comment,      gui = "italic" },
+    sym("@comment.error")               { fg = p.error_,       gui = "bold" },
+    sym("@comment.warning")             { fg = p.warn_,        gui = "bold" },
+    sym("@comment.todo")                { fg = p.macro_,       gui = "bold" },
+    sym("@comment.note")                { fg = p.info_,        gui = "bold" },
 
     -- Markup (markdown etc.)
-    ["@markup.strong"]               { gui = "bold" },
-    ["@markup.italic"]               { gui = "italic" },
-    ["@markup.strikethrough"]        { gui = "strikethrough" },
-    ["@markup.underline"]            { gui = "underline" },
-    ["@markup.heading"]              { fg = p.func_user,  gui = "bold" },
-    ["@markup.heading.1"]            { fg = p.keyword,    gui = "bold" },
-    ["@markup.heading.2"]            { fg = p.func_user,  gui = "bold" },
-    ["@markup.heading.3"]            { fg = p.type_,      gui = "bold" },
-    ["@markup.heading.4"]            { fg = p.constant,   gui = "bold" },
-    ["@markup.heading.5"]            { fg = p.macro_,     gui = "bold" },
-    ["@markup.heading.6"]            { fg = p.func_stdlib, gui = "bold" },
-    ["@markup.quote"]                { fg = p.comment,    gui = "italic" },
-    ["@markup.math"]                 { fg = p.number },
-    ["@markup.link"]                 { fg = p.info_ },
-    ["@markup.link.label"]           { fg = p.func_user },
-    ["@markup.link.url"]             { fg = p.info_,      gui = "underline" },
-    ["@markup.raw"]                  { fg = p.string_ },
-    ["@markup.raw.block"]            { fg = p.string_ },
-    ["@markup.list"]                 { fg = p.keyword },
-    ["@markup.list.checked"]         { fg = p.git_add },
-    ["@markup.list.unchecked"]       { fg = p.fg_active },
+    sym("@markup.strong")               {                      gui = "bold" },
+    sym("@markup.italic")               {                      gui = "italic" },
+    sym("@markup.strikethrough")        {                      gui = "strikethrough" },
+    sym("@markup.underline")            {                      gui = "underline" },
+    sym("@markup.heading")              { fg = p.func_user,    gui = "bold" },
+    sym("@markup.heading.1")            { fg = p.keyword,      gui = "bold" },
+    sym("@markup.heading.2")            { fg = p.func_user,    gui = "bold" },
+    sym("@markup.heading.3")            { fg = p.type_,        gui = "bold" },
+    sym("@markup.heading.4")            { fg = p.constant,     gui = "bold" },
+    sym("@markup.heading.5")            { fg = p.macro_,       gui = "bold" },
+    sym("@markup.heading.6")            { fg = p.func_stdlib,  gui = "bold" },
+    sym("@markup.quote")                { fg = p.comment,      gui = "italic" },
+    sym("@markup.math")                 { fg = p.number },
+    sym("@markup.link")                 { fg = p.info_ },
+    sym("@markup.link.label")           { fg = p.func_user },
+    sym("@markup.link.url")             { fg = p.info_,        gui = "underline" },
+    sym("@markup.raw")                  { fg = p.string_ },
+    sym("@markup.raw.block")            { fg = p.string_ },
+    sym("@markup.list")                 { fg = p.keyword },
+    sym("@markup.list.checked")         { fg = p.git_add },
+    sym("@markup.list.unchecked")       { fg = p.fg_active },
 
     -- Diff (TS)
-    ["@diff.plus"]                   { fg = p.git_add },
-    ["@diff.minus"]                  { fg = p.git_delete },
-    ["@diff.delta"]                  { fg = p.git_change },
+    sym("@diff.plus")                   { fg = p.git_add },
+    sym("@diff.minus")                  { fg = p.git_delete },
+    sym("@diff.delta")                  { fg = p.git_change },
 
     -- Tags (HTML/JSX)
-    ["@tag"]                         { fg = p.keyword },
-    ["@tag.builtin"]                 { fg = p.keyword },
-    ["@tag.attribute"]               { fg = p.parameter },
-    ["@tag.delimiter"]               { fg = p.fg },
+    sym("@tag")                         { fg = p.keyword },
+    sym("@tag.builtin")                 { fg = p.keyword },
+    sym("@tag.attribute")               { fg = p.parameter },
+    sym("@tag.delimiter")               { fg = p.fg },
 
     -- ── LSP semantic tokens ───────────────────────────────────────────────
-    -- These run on top of Treesitter and give more precise info (e.g. stdlib vs user)
 
-    ["@lsp.type.class"]              { fg = p.type_ },
-    ["@lsp.type.comment"]            { fg = p.comment,    gui = "italic" },
-    ["@lsp.type.decorator"]          { fg = p.func_user },
-    ["@lsp.type.enum"]               { fg = p.type_ },
-    ["@lsp.type.enumMember"]         { fg = p.constant },
-    ["@lsp.type.event"]              { fg = p.type_ },
-    ["@lsp.type.function"]           { fg = p.func_user },
-    ["@lsp.type.interface"]          { fg = p.type_ },
-    ["@lsp.type.keyword"]            { fg = p.keyword },
-    ["@lsp.type.macro"]              { fg = p.macro_ },
-    ["@lsp.type.method"]             { fg = p.func_user },
-    ["@lsp.type.modifier"]           { fg = p.keyword },
-    ["@lsp.type.namespace"]          { fg = p.type_ },
-    ["@lsp.type.number"]             { fg = p.number },
-    ["@lsp.type.operator"]           { fg = p.fg },
-    ["@lsp.type.parameter"]          { fg = p.parameter },
-    ["@lsp.type.property"]           { fg = p.fg },
-    ["@lsp.type.regexp"]             { fg = p.string_ },
-    ["@lsp.type.string"]             { fg = p.string_ },
-    ["@lsp.type.struct"]             { fg = p.type_ },
-    ["@lsp.type.type"]               { fg = p.type_ },
-    ["@lsp.type.typeParameter"]      { fg = p.type_ },
-    ["@lsp.type.variable"]           { fg = p.fg },
+    sym("@lsp.type.class")              { fg = p.type_ },
+    sym("@lsp.type.comment")            { fg = p.comment,      gui = "italic" },
+    sym("@lsp.type.decorator")          { fg = p.func_user },
+    sym("@lsp.type.enum")               { fg = p.type_ },
+    sym("@lsp.type.enumMember")         { fg = p.constant },
+    sym("@lsp.type.event")              { fg = p.type_ },
+    sym("@lsp.type.function")           { fg = p.func_user },
+    sym("@lsp.type.interface")          { fg = p.type_ },
+    sym("@lsp.type.keyword")            { fg = p.keyword },
+    sym("@lsp.type.macro")              { fg = p.macro_ },
+    sym("@lsp.type.method")             { fg = p.func_user },
+    sym("@lsp.type.modifier")           { fg = p.keyword },
+    sym("@lsp.type.namespace")          { fg = p.type_ },
+    sym("@lsp.type.number")             { fg = p.number },
+    sym("@lsp.type.operator")           { fg = p.fg },
+    sym("@lsp.type.parameter")          { fg = p.parameter },
+    sym("@lsp.type.property")           { fg = p.fg },
+    sym("@lsp.type.regexp")             { fg = p.string_ },
+    sym("@lsp.type.string")             { fg = p.string_ },
+    sym("@lsp.type.struct")             { fg = p.type_ },
+    sym("@lsp.type.type")               { fg = p.type_ },
+    sym("@lsp.type.typeParameter")      { fg = p.type_ },
+    sym("@lsp.type.variable")           { fg = p.fg },
 
-    -- Semantic token modifiers — this is what separates stdlib from user code
-    ["@lsp.typemod.function.defaultLibrary"]  { fg = p.func_stdlib },
-    ["@lsp.typemod.method.defaultLibrary"]    { fg = p.func_stdlib },
-    ["@lsp.typemod.variable.defaultLibrary"]  { fg = p.func_stdlib },
-    ["@lsp.typemod.function.readonly"]        { fg = p.func_user,  gui = "italic" },
-    ["@lsp.typemod.variable.readonly"]        { fg = p.constant },
-    ["@lsp.typemod.variable.static"]          { fg = p.constant },
+    -- Modifiers — key for stdlib vs user-defined distinction
+    sym("@lsp.typemod.function.defaultLibrary")  { fg = p.func_stdlib },
+    sym("@lsp.typemod.method.defaultLibrary")    { fg = p.func_stdlib },
+    sym("@lsp.typemod.variable.defaultLibrary")  { fg = p.func_stdlib },
+    sym("@lsp.typemod.function.readonly")        { fg = p.func_user,  gui = "italic" },
+    sym("@lsp.typemod.variable.readonly")        { fg = p.constant },
+    sym("@lsp.typemod.variable.static")          { fg = p.constant },
 
     -- ── Git signs (lewis6991/gitsigns.nvim) ───────────────────────────────
 
@@ -376,7 +379,7 @@ return lush(function()
     GitSignsChangeLn          { bg = hsl("#161005") },
     GitSignsDeleteLn          { bg = hsl("#1C0A0A") },
 
-    -- ── Telescope (nvim-telescope/telescope.nvim) ─────────────────────────
+    -- ── Telescope ─────────────────────────────────────────────────────────
 
     TelescopeBorder           { fg = p.fg_border,   bg = p.bg_sidebar },
     TelescopeNormal           { bg = p.bg_sidebar,  fg = p.fg },
@@ -389,21 +392,7 @@ return lush(function()
     TelescopeSelectionCaret   { fg = p.keyword },
     TelescopeMatching         { fg = p.func_stdlib, gui = "bold" },
 
-    -- ── nvim-tree (nvim-tree/nvim-tree.lua) ───────────────────────────────
-
-    NvimTreeNormal            { bg = p.bg_sidebar,  fg = p.fg },
-    NvimTreeFolderIcon        { fg = p.macro_ },
-    NvimTreeFolderName        { fg = p.fg },
-    NvimTreeOpenedFolderName  { fg = p.fg,          gui = "bold" },
-    NvimTreeRootFolder        { fg = p.keyword,     gui = "bold" },
-    NvimTreeGitDirty          { fg = p.git_change },
-    NvimTreeGitNew            { fg = p.git_add },
-    NvimTreeGitDeleted        { fg = p.git_delete },
-    NvimTreeIndentMarker      { fg = p.fg_dim },
-    NvimTreeSymlink           { fg = p.type_ },
-    NvimTreeExecFile          { fg = p.func_user },
-
-    -- ── neo-tree (nvim-neo-tree/neo-tree.nvim) — LazyVim default ──────────
+    -- ── neo-tree ──────────────────────────────────────────────────────────
 
     NeoTreeNormal             { bg = p.bg_sidebar,  fg = p.fg },
     NeoTreeNormalNC           { bg = p.bg_sidebar,  fg = p.fg },
@@ -418,12 +407,12 @@ return lush(function()
     NeoTreeGitUntracked       { fg = p.fg_active },
     NeoTreeIndentMarker       { fg = p.fg_dim },
     NeoTreeSymbolicLinkTarget { fg = p.type_ },
-    NeoTreeTitleBar           { bg = p.macro_,      fg = p.bg, gui = "bold" },
+    NeoTreeTitleBar           { bg = p.macro_,      fg = p.bg,  gui = "bold" },
     NeoTreeFloatBorder        { fg = p.fg_border },
-    NeoTreeTabActive          { bg = p.bg,          fg = p.fg, gui = "bold" },
+    NeoTreeTabActive          { bg = p.bg,          fg = p.fg,  gui = "bold" },
     NeoTreeTabInactive        { bg = p.bg_sidebar,  fg = p.fg_active },
 
-    -- ── which-key (folke/which-key.nvim) ─────────────────────────────────
+    -- ── which-key ─────────────────────────────────────────────────────────
 
     WhichKey          { fg = p.keyword },
     WhichKeyGroup     { fg = p.type_ },
@@ -433,52 +422,52 @@ return lush(function()
     WhichKeyBorder    { fg = p.fg_border },
     WhichKeyValue     { fg = p.func_stdlib },
 
-    -- ── nvim-cmp (hrsh7th/nvim-cmp) ───────────────────────────────────────
+    -- ── nvim-cmp ──────────────────────────────────────────────────────────
 
-    CmpItemAbbr           { fg = p.fg },
-    CmpItemAbbrMatch      { fg = p.func_stdlib,  gui = "bold" },
-    CmpItemAbbrMatchFuzzy { fg = p.func_stdlib,  gui = "bold" },
-    CmpItemAbbrDeprecated { fg = p.fg_dim,       gui = "strikethrough" },
-    CmpItemMenu           { fg = p.fg_active },
-    CmpItemKindText       { fg = p.fg },
-    CmpItemKindMethod     { fg = p.func_user },
-    CmpItemKindFunction   { fg = p.func_user },
-    CmpItemKindConstructor{ fg = p.type_ },
-    CmpItemKindField      { fg = p.fg },
-    CmpItemKindVariable   { fg = p.fg },
-    CmpItemKindClass      { fg = p.type_ },
-    CmpItemKindInterface  { fg = p.type_ },
-    CmpItemKindModule     { fg = p.type_ },
-    CmpItemKindProperty   { fg = p.fg },
-    CmpItemKindUnit       { fg = p.number },
-    CmpItemKindValue      { fg = p.constant },
-    CmpItemKindEnum       { fg = p.type_ },
-    CmpItemKindKeyword    { fg = p.keyword },
-    CmpItemKindSnippet    { fg = p.macro_ },
-    CmpItemKindColor      { fg = p.string_ },
-    CmpItemKindFile       { fg = p.fg_active },
-    CmpItemKindReference  { fg = p.constant },
-    CmpItemKindFolder     { fg = p.fg_active },
-    CmpItemKindEnumMember { fg = p.constant },
-    CmpItemKindConstant   { fg = p.constant },
-    CmpItemKindStruct     { fg = p.type_ },
-    CmpItemKindEvent      { fg = p.type_ },
-    CmpItemKindOperator   { fg = p.fg },
+    CmpItemAbbr              { fg = p.fg },
+    CmpItemAbbrMatch         { fg = p.func_stdlib,  gui = "bold" },
+    CmpItemAbbrMatchFuzzy    { fg = p.func_stdlib,  gui = "bold" },
+    CmpItemAbbrDeprecated    { fg = p.fg_dim,       gui = "strikethrough" },
+    CmpItemMenu              { fg = p.fg_active },
+    CmpItemKindText          { fg = p.fg },
+    CmpItemKindMethod        { fg = p.func_user },
+    CmpItemKindFunction      { fg = p.func_user },
+    CmpItemKindConstructor   { fg = p.type_ },
+    CmpItemKindField         { fg = p.fg },
+    CmpItemKindVariable      { fg = p.fg },
+    CmpItemKindClass         { fg = p.type_ },
+    CmpItemKindInterface     { fg = p.type_ },
+    CmpItemKindModule        { fg = p.type_ },
+    CmpItemKindProperty      { fg = p.fg },
+    CmpItemKindUnit          { fg = p.number },
+    CmpItemKindValue         { fg = p.constant },
+    CmpItemKindEnum          { fg = p.type_ },
+    CmpItemKindKeyword       { fg = p.keyword },
+    CmpItemKindSnippet       { fg = p.macro_ },
+    CmpItemKindColor         { fg = p.string_ },
+    CmpItemKindFile          { fg = p.fg_active },
+    CmpItemKindReference     { fg = p.constant },
+    CmpItemKindFolder        { fg = p.fg_active },
+    CmpItemKindEnumMember    { fg = p.constant },
+    CmpItemKindConstant      { fg = p.constant },
+    CmpItemKindStruct        { fg = p.type_ },
+    CmpItemKindEvent         { fg = p.type_ },
+    CmpItemKindOperator      { fg = p.fg },
     CmpItemKindTypeParameter { fg = p.type_ },
 
-    -- ── indent-blankline (lukas-reineke/indent-blankline.nvim) ────────────
+    -- ── indent-blankline ──────────────────────────────────────────────────
 
-    IblIndent         { fg = hsl("#1E1E1E") },  -- very subtle indent guides
-    IblScope          { fg = hsl("#3D3D3D") },  -- current scope guide, slightly brighter
+    IblIndent         { fg = hsl("#1E1E1E") },
+    IblScope          { fg = hsl("#3D3D3D") },
 
-    -- ── flash.nvim (folke/flash.nvim) — LazyVim extra ────────────────────
+    -- ── flash.nvim ────────────────────────────────────────────────────────
 
     FlashBackdrop     { fg = p.fg_dim },
     FlashMatch        { bg = p.bg_search,  fg = p.fg },
     FlashCurrent      { bg = p.info_,      fg = p.bg,  gui = "bold" },
     FlashLabel        { bg = p.keyword,    fg = p.bg,  gui = "bold" },
 
-    -- ── Noice (folke/noice.nvim) — LazyVim default ────────────────────────
+    -- ── Noice ─────────────────────────────────────────────────────────────
 
     NoiceVirtualText  { fg = p.fg_active },
     NoiceCmdline      { fg = p.fg,         bg = p.bg_widget },
@@ -486,21 +475,15 @@ return lush(function()
     NoicePopupBorder  { fg = p.fg_border,  bg = p.bg_sidebar },
     NoiceConfirm      { bg = p.bg_sidebar },
 
-    -- ── Lualine — colours exposed for lualine config (see README) ─────────
-    -- Not highlight groups, but useful to export via g:vscode_dark_palette
-    -- (set in colors/vscode_dark_2026.lua if desired)
+    -- ── Rainbow delimiters ────────────────────────────────────────────────
 
-    -- ── Rainbow delimiters (HiPhish/rainbow-delimiters.nvim) ─────────────
-    -- Plugin cycles through these 7 groups. With 3 colours we fill 1-3
-    -- and repeat the cycle manually for 4-7.
-
-    RainbowDelimiter1 { fg = p.rainbow1 },  -- yellow
-    RainbowDelimiter2 { fg = p.rainbow2 },  -- purple
-    RainbowDelimiter3 { fg = p.rainbow3 },  -- blue
-    RainbowDelimiter4 { fg = p.rainbow1 },  -- yellow (repeat)
-    RainbowDelimiter5 { fg = p.rainbow2 },  -- purple (repeat)
-    RainbowDelimiter6 { fg = p.rainbow3 },  -- blue (repeat)
-    RainbowDelimiter7 { fg = p.rainbow1 },  -- yellow (repeat)
+    RainbowDelimiter1 { fg = p.rainbow1 },
+    RainbowDelimiter2 { fg = p.rainbow2 },
+    RainbowDelimiter3 { fg = p.rainbow3 },
+    RainbowDelimiter4 { fg = p.rainbow1 },
+    RainbowDelimiter5 { fg = p.rainbow2 },
+    RainbowDelimiter6 { fg = p.rainbow3 },
+    RainbowDelimiter7 { fg = p.rainbow1 },
 
   }
 end)
