@@ -268,6 +268,8 @@ return lush(function(injected)
     sym("@function.macro")              { fg = p.macro_ },
     sym("@function.method")             { fg = p.func_user },
     sym("@function.method.call")        { fg = p.func_user },
+    sym("@method")                      { fg = p.func_user },
+    sym("@method.call")                 { fg = p.func_user },
 
     -- Keywords
     sym("@keyword")                     { fg = p.keyword },
