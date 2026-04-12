@@ -30,6 +30,7 @@ local p = {
 	-- Syntax
 	comment = hsl("#8B949E"),
 	keyword = hsl("#FF7B72"),
+	control = hsl("#C586C0"),
 	type_ = hsl("#4EC9B0"),
 	func_user = hsl("#D2A8FF"),
 	func_stdlib = hsl("#D2A8FF"),
@@ -88,12 +89,12 @@ return lush(function(injected)
 
 		-- Statements & keywords
 		Statement({ fg = p.keyword }),
-		Conditional({ fg = p.keyword }),
-		Repeat({ fg = p.keyword }),
+		Conditional({ fg = p.control }),
+		Repeat({ fg = p.control }),
 		Label({ fg = p.keyword }),
 		Operator({ fg = p.fg }),
 		Keyword({ fg = p.keyword }),
-		Exception({ fg = p.keyword }),
+		Exception({ fg = p.control }),
 
 		-- Preprocessor / meta
 		PreProc({ fg = p.keyword }),
@@ -279,12 +280,12 @@ return lush(function(injected)
 		sym("@keyword.import")({ fg = p.keyword }),
 		sym("@keyword.type")({ fg = p.keyword }),
 		sym("@keyword.modifier")({ fg = p.keyword }),
-		sym("@keyword.repeat")({ fg = p.keyword }),
-		sym("@keyword.return")({ fg = p.keyword }),
+		sym("@keyword.repeat")({ fg = p.control }),
+		sym("@keyword.return")({ fg = p.control }),
 		sym("@keyword.debug")({ fg = p.warn_ }),
-		sym("@keyword.exception")({ fg = p.keyword }),
-		sym("@keyword.conditional")({ fg = p.keyword }),
-		sym("@keyword.conditional.ternary")({ fg = p.keyword }),
+		sym("@keyword.exception")({ fg = p.control }),
+		sym("@keyword.conditional")({ fg = p.control }),
+		sym("@keyword.conditional.ternary")({ fg = p.control }),
 		sym("@keyword.directive")({ fg = p.keyword }),
 		sym("@keyword.directive.define")({ fg = p.keyword }),
 
@@ -488,4 +489,3 @@ return lush(function(injected)
 		RainbowDelimiter7({ fg = p.rainbow1 }),
 	}
 end)
-
