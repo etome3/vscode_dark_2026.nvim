@@ -70,7 +70,7 @@ vim.cmd.colorscheme("vscode_dark_2026")
 ```
 
 Plugin integrations can be enabled by short group name, such as `telescope`,
-`cmp`, `blink`, `neo-tree`, `which-key`, or by plugin name, such as
+`cmp`, `blink`, `snacks`, `neo-tree`, `which-key`, or by plugin name, such as
 `["telescope.nvim"] = true`. When `plugins.auto = true` and lazy.nvim is loaded,
 installed supported plugins are detected automatically.
 
@@ -92,7 +92,7 @@ Plugin coverage includes:
 - `telescope.nvim`, `fzf-lua`, `flash.nvim`, `which-key.nvim`
 - `neo-tree.nvim`, `nvim-tree.lua`, `gitsigns.nvim`, `vim-gitgutter`
 - `lazy.nvim`, `noice.nvim`, `nvim-notify`, `trouble.nvim`
-- `render-markdown.nvim`, `rainbow-delimiters.nvim`,
+- `snacks.nvim`, `render-markdown.nvim`, `rainbow-delimiters.nvim`,
   `indent-blankline.nvim`
 
 ## Palette

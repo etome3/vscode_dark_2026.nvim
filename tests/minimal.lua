@@ -33,7 +33,7 @@ normal = vim.api.nvim_get_hl(0, { name = "Normal" })
 assert_eq(normal.bg, nil, "transparent Normal bg")
 
 local colors, highlights = theme.load({
-  plugins = { all = false, auto = false, telescope = true, cmp = false },
+  plugins = { all = false, auto = false, telescope = true, snacks = true, cmp = false },
   on_colors = function(c)
     c.info = "#abcdef"
   end,
@@ -44,6 +44,7 @@ local colors, highlights = theme.load({
 
 assert_eq(colors.info, "#abcdef", "on_colors override")
 assert_truthy(highlights.TelescopeNormal, "telescope should be enabled")
+assert_truthy(highlights.SnacksDashboardKey, "snacks should be enabled")
 assert_eq(highlights.CmpItemAbbr, nil, "cmp should be disabled")
 local override = vim.api.nvim_get_hl(0, { name = "TestOverride" })
 assert_eq(override.fg, tonumber("abcdef", 16), "on_highlights override")
