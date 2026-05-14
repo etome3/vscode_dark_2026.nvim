@@ -1,131 +1,131 @@
 # vscode_dark_2026.nvim
 
-A faithful Neovim port of VS Code Dark 2026, built with [lush.nvim](https://github.com/rktjmp/lush.nvim).
+A polished standalone Neovim port of VS Code Dark 2026.
 
-Covers core Vim groups, Treesitter, LSP semantic tokens (including the
-stdlib-vs-user-function distinction), diagnostics, rainbow delimiters,
-and common LazyVim plugins.
+The theme keeps the VS Code Dark syntax identity while using a native
+Tokyonight-inspired architecture: modular palette, grouped highlights, terminal
+colors, user overrides, and optional plugin integrations. It does not require
+`lush.nvim`.
 
----
-
-## Installation (LazyVim)
-
-Place the theme folder somewhere on your machine, e.g.
-`~/.config/nvim/lua/plugins/vscode_dark_2026/`, or publish it as a repo
-and point Lazy at it. Both approaches are shown below.
-
-### Option A — local directory
+## Installation
 
 ```lua
--- ~/.config/nvim/lua/plugins/vscode_dark_2026.lua
 return {
-  { "rktjmp/lush.nvim", lazy = true },
   {
-    dir = "/absolute/path/to/vscode_dark_2026", -- ← change this
+    "your_username/vscode_dark_2026.nvim",
+    lazy = false,
+    priority = 1000,
+    config = function()
+      vim.cmd.colorscheme("vscode_dark_2026")
+    end,
+  },
+}
+```
+
+For a local checkout:
+
+```lua
+return {
+  {
+    dir = "/absolute/path/to/vscode_dark_2026.nvim",
     name = "vscode_dark_2026",
     lazy = false,
     priority = 1000,
     config = function()
-      vim.cmd("colorscheme vscode_dark_2026")
+      vim.cmd.colorscheme("vscode_dark_2026")
     end,
   },
 }
 ```
 
-### Option B — GitHub repo
+## Configuration
+
+Configure before loading the colorscheme:
 
 ```lua
-return {
-  { "rktjmp/lush.nvim", lazy = true },
-  {
-    "your_username/vscode_dark_2026.nvim", -- ← change this
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd("colorscheme vscode_dark_2026")
-    end,
+require("vscode_dark_2026").setup({
+  transparent = false,
+  terminal_colors = true,
+  dim_inactive = false,
+  styles = {
+    comments = { italic = true },
+    keywords = {},
+    functions = {},
+    variables = {},
   },
-}
-```
-
----
-
-## Rainbow delimiters
-
-Install [rainbow-delimiters.nvim](https://github.com/HiPhish/rainbow-delimiters.nvim)
-and the theme's `RainbowDelimiter1–7` groups are picked up automatically.
-
-```lua
--- ~/.config/nvim/lua/plugins/rainbow.lua
-return {
-  "HiPhish/rainbow-delimiters.nvim",
-  event = "BufReadPost",
-  config = function()
-    local rainbow = require("rainbow-delimiters")
-    vim.g.rainbow_delimiters = {
-      strategy = {
-        [""] = rainbow.strategy["global"],
-      },
-      query = {
-        [""] = "rainbow-delimiters",
-        lua  = "rainbow-blocks",
-      },
-      -- Colours come from the theme's RainbowDelimiter1–7 groups.
-      -- No highlight override needed here.
-    }
+  plugins = {
+    all = false,
+    auto = true,
+    telescope = true,
+  },
+  on_colors = function(colors)
+    -- colors.info = "#58a6ff"
   end,
-}
+  on_highlights = function(highlights, colors)
+    -- highlights.CursorLine = { bg = colors.bg_widget }
+  end,
+})
+
+vim.cmd.colorscheme("vscode_dark_2026")
 ```
 
-The theme cycles: **yellow → purple → blue → yellow → …** matching VS Code's
-bracket pair colouriser.
+Plugin integrations can be enabled by short group name, such as `telescope`,
+`cmp`, `blink`, `neo-tree`, `which-key`, or by plugin name, such as
+`["telescope.nvim"] = true`. When `plugins.auto = true` and lazy.nvim is loaded,
+installed supported plugins are detected automatically.
 
----
+## Supported Highlights
 
-## Colour palette reference
+Core coverage includes:
 
-| Token                        | Colour    | Hex       |
-|------------------------------|-----------|-----------|
-| Background                   | dark      | `#0E0E0E` |
-| Default fg / variables / ops | light grey| `#C9D1D9` |
-| Comments                     | grey      | `#8B949E` |
-| Keywords (`fn`, `let`, …)    | red       | `#FF7B72` |
-| Types / namespaces           | teal      | `#4EC9B0` |
-| User functions & methods     | purple    | `#D2A8FF` |
-| Stdlib functions (`from`, …) | yellow    | `#DCDCAA` |
-| Constants / enum variants    | light blue| `#79C0FF` |
-| Macros / booleans            | blue      | `#569CD6` |
-| Strings & char literals      | sky blue  | `#A5D6FF` |
-| Numbers                      | sage green| `#B5CEA8` |
-| Parameters                   | orange    | `#FFA657` |
-| Generic angle brackets `<>`  | dark grey | `#BBBEBF` |
-| Rainbow layer 1              | yellow    | `#FFD700` |
-| Rainbow layer 2              | purple    | `#DA70D6` |
-| Rainbow layer 3              | blue      | `#179FFF` |
+- Vim UI, floating windows, popups, statusline, tabline, winbar, signs, folds,
+  messages, search, visual mode, spell, diff, and diagnostics
+- Classic syntax groups
+- Treesitter captures, including current `@markup.*` groups and legacy aliases
+- LSP semantic tokens, including `defaultLibrary` handling for stdlib methods
+- Completion kinds shared by completion and symbol plugins
+- Terminal ANSI colors
 
----
+Plugin coverage includes:
 
-## Live editing with Lushify
+- `nvim-cmp`, `blink.cmp`
+- `telescope.nvim`, `fzf-lua`, `flash.nvim`, `which-key.nvim`
+- `neo-tree.nvim`, `nvim-tree.lua`, `gitsigns.nvim`, `vim-gitgutter`
+- `lazy.nvim`, `noice.nvim`, `nvim-notify`, `trouble.nvim`
+- `render-markdown.nvim`, `rainbow-delimiters.nvim`,
+  `indent-blankline.nvim`
 
-Open `lua/lush_theme/vscode_dark_2026.lua` in Neovim and run:
+## Palette
 
+| Role | Hex |
+| --- | --- |
+| Background | `#0e0e0e` |
+| Sidebar | `#141414` |
+| Float | `#181818` |
+| Popup | `#1f1f1f` |
+| Foreground | `#c9d1d9` |
+| Comments | `#8b949e` |
+| Keywords | `#ff7b72` |
+| Control flow | `#c586c0` |
+| Types and namespaces | `#4ec9b0` |
+| User functions and methods | `#d2a8ff` |
+| Stdlib functions and methods | `#dcdcaa` |
+| Constants and enum members | `#79c0ff` |
+| Macros and booleans | `#569cd6` |
+| Strings | `#a5d6ff` |
+| Numbers | `#b5cea8` |
+| Parameters | `#ffa657` |
+| Errors | `#f85149` |
+| Warnings | `#d29922` |
+| Info | `#58a6ff` |
+| Git add | `#3fb950` |
+| Git change | `#d29922` |
+| Git delete | `#f85149` |
+
+## Testing
+
+Run the lightweight headless check from the repository root:
+
+```sh
+nvim --headless -u NONE -l tests/minimal.lua
 ```
-:Lushify
-```
-
-Changes are reflected in real time as you edit colours.
-
----
-
-## Notes
-
-- **Stdlib method distinction** (`from`, `new`, `len` etc. in yellow vs user
-  methods in purple) depends on your LSP providing semantic tokens with the
-  `defaultLibrary` modifier. `rust-analyzer` does this out of the box.
-  Without semantic tokens active, all methods fall back to purple.
-
-- **Angle brackets `<>`**: Treesitter maps all brackets through
-  `@punctuation.bracket`. The darker grey for generics specifically comes from
-  VS Code's semantic token layer. If you want exact parity you can add a
-  Rust-specific treesitter query override, but in practice it is barely
-  noticeable.
