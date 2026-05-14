@@ -34,9 +34,9 @@ function M.get(c)
     ["@lsp.mod.documentation"] = { fg = c.comment, italic = true },
     ["@lsp.mod.unsafe"] = { fg = c.warning },
 
-    ["@lsp.typemod.function.defaultLibrary"] = { fg = c.yellow },
-    ["@lsp.typemod.method.defaultLibrary"] = { fg = c.yellow },
-    ["@lsp.typemod.variable.defaultLibrary"] = { fg = c.yellow },
+    ["@lsp.typemod.function.defaultLibrary"] = "@lsp.type.function",
+    ["@lsp.typemod.method.defaultLibrary"] = "@lsp.type.method",
+    ["@lsp.typemod.variable.defaultLibrary"] = "@lsp.type.variable",
     ["@lsp.typemod.property.readonly"] = { fg = c.blue1 },
     ["@lsp.typemod.variable.readonly"] = { fg = c.blue1 },
     ["@lsp.typemod.class.defaultLibrary"] = { fg = c.teal },
