@@ -82,7 +82,7 @@ Core coverage includes:
   messages, search, visual mode, spell, diff, and diagnostics
 - Classic syntax groups
 - Treesitter captures, including current `@markup.*` groups and legacy aliases
-- LSP semantic tokens, including `defaultLibrary` handling for stdlib methods
+- LSP semantic tokens without special default-library recoloring
 - Completion kinds shared by completion and symbol plugins
 - Terminal ANSI colors
 
@@ -109,7 +109,6 @@ Plugin coverage includes:
 | Control flow | `#c586c0` |
 | Types and namespaces | `#4ec9b0` |
 | User functions and methods | `#d2a8ff` |
-| Stdlib functions and methods | `#dcdcaa` |
 | Constants and enum members | `#79c0ff` |
 | Macros and booleans | `#569cd6` |
 | Strings | `#a5d6ff` |

@@ -27,7 +27,7 @@ function M.get(c)
     ["@lsp.type.typeParameter"] = { fg = c.teal },
     ["@lsp.type.variable"] = { fg = c.fg },
 
-    ["@lsp.mod.defaultLibrary"] = { fg = c.yellow },
+    ["@lsp.mod.defaultLibrary"] = {},
     ["@lsp.mod.deprecated"] = { strikethrough = true },
     ["@lsp.mod.readonly"] = { fg = c.blue1 },
     ["@lsp.mod.static"] = { fg = c.blue1 },
